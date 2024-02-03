@@ -24,7 +24,6 @@ const App = () => {
   };
   return (
     <div>
-      {}
       {alertVisible && (
         <Alert onClose={() => setAlertVisibility(false)}>
           <strong>Pedro</strong>
