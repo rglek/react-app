@@ -9,29 +9,38 @@ let items = ["New York", "London", "Paris", "Tokio", "Sydney"];
 
 const App = () => {
   const [alertVisible, setAlertVisibility] = useState(false);
-  
+
   const handleSelectItem = (item: string) => {
     console.log(item);
   };
 
-  const handleButtonClick = () => {
+  const handleSwapClick = () => {
+    setAlertVisibility(!alertVisible);
+    console.log("alertVisible:", alertVisible);
+  };
+
+  const handCancelClick = () => {
     console.log("click");
   };
   return (
-    
     <div>
       {}
-      <Alert>
-        <h1>Pedro</h1>
-      </Alert>
+      {alertVisible && (
+        <Alert onClose={() => setAlertVisibility(false)}>
+          <strong>Pedro</strong>
+        </Alert>
+      )}
       <ListGroup
         items={items}
         heading="Cities"
         onSelectItem={handleSelectItem}
       />
-      <Button onClick={handleButtonClick}>Submit</Button>
-      <Button onClick={handleButtonClick} color="danger">
-        Cancel
+      <Button onClick={() => setAlertVisibility(true)}>Show Alert</Button>
+      <Button onClick={handleSwapClick} color="secondary">
+        Swap Alert
+      </Button>
+      <Button onClick={() => setAlertVisibility(false)} color="danger">
+        Hide A
       </Button>
     </div>
   );
