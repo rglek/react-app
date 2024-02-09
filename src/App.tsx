@@ -1,25 +1,23 @@
 import { Control, useFieldArray, useForm, useWatch } from "react-hook-form";
-import Headers from "./components/Header";
-import "./styles.css";
+
 
 type LeadCapabilityDetail = {
-  detail: {
+  dets: {
     employeeComment: string;
-    amount: number;
     id?: number;
     leadCompetencyId?: number;
-    leadStatusId?: number;
+    leadStatusId: number;
     managerComment?: string | undefined;
   }[];
 };
 
 let renderCount = 0;
 
-function getTotal(payload: LeadCapabilityDetail["detail"]) {
+function getTotal(payload: LeadCapabilityDetail["dets"]) {
   let total = 0;
 
   for (const item of payload) {
-    total = total + (Number.isNaN(item.amount) ? 0 : item.amount);
+    total = total + (Number.isNaN(item.leadStatusId) ? 0 : item.leadStatusId);
   }
 
   return total;
@@ -28,7 +26,7 @@ function getTotal(payload: LeadCapabilityDetail["detail"]) {
 function TotalAmout({ control }: { control: Control<LeadCapabilityDetail> }) {
   const cartValues = useWatch({
     control,
-    name: "detail",
+    name: "dets",
   });
 
   return <p>{getTotal(cartValues)}</p>;
@@ -43,24 +41,26 @@ export default function App() {
     control,
   } = useForm<LeadCapabilityDetail>({
     defaultValues: {
-      detail: [{ employeeComment: "Pedro", amount: 0 }],
+      dets: [{ employeeComment: "Pedro", leadStatusId: 0 }],
     },
   });
   const { fields, append, prepend, remove } = useFieldArray({
-    name: "detail",
+    name: "dets",
     control,
     rules: {
       required: "Please append at least 1 item",
     },
   });
+ 
+
   renderCount++;
 
   return (
     <div>
-      <Headers
+      {/* <Headers
         renderCount={renderCount}
         description="Performant, flexible and extensible forms with easy-to-use validation."
-      />
+      /> */}
       <form
         onSubmit={handleSubmit((data) => {
           console.log("Submit data", data);
@@ -70,9 +70,9 @@ export default function App() {
           return (
             <section key={field.id}>
               <label>
-                <span>Name {`detail.${index}.name`}</span>
+                <div>Name {`dets.${index}.employeeComment`}</div>
                 <input
-                  {...register(`detail.${index}.employeeComment`, {
+                  {...register(`dets.${index}.employeeComment`, {
                     required: true,
                   })}
                 />
@@ -81,7 +81,7 @@ export default function App() {
                 <span>amount</span>
                 <input
                   type="number"
-                  {...register(`detail.${index}.amount`, {
+                  {...register(`dets.${index}.leadStatusId`, {
                     valueAsNumber: true,
                   })}
                 />
@@ -97,7 +97,7 @@ export default function App() {
           onClick={() => {
             append({
               employeeComment: "append",
-              amount: 0,
+              leadStatusId: 0,
             });
           }}
         >
@@ -108,7 +108,7 @@ export default function App() {
           onClick={() => {
             prepend({
               employeeComment: "prepend",
-              amount: 0,
+              leadStatusId: 0,
             });
           }}
         >
@@ -117,7 +117,7 @@ export default function App() {
 
         <TotalAmout control={control} />
 
-        <p>{errors.detail?.root?.message}</p>
+        <p>{errors.dets?.root?.message}</p>
         <button type="submit">Submit</button>
       </form>
     </div>
